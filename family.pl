@@ -58,35 +58,43 @@ parent(aurelianoBabilonia, mauricioBabilonia).
 parent(aurelianoJunior, amarantaUrsula).
 parent(aurelianoJunior, aurelianoBabilonia).
 
-father(X, Y) 	:- parent(X, Y), male(Y).
-mother(X, Y) 	:- parent(X, Y), female(Y).
+father(X, Y) :- parent(X, Y), male(Y).
+mother(X, Y) :- parent(X, Y), female(Y).
 
-child(X, Y) 	:- parent(Y, X).
-son(X, Y) 		:- child(X, Y), male(Y).
-daughter(X, Y) 	:- child(X, Y), female(Y).
+child(X, Y) :- parent(Y, X).
+son(X, Y) :- child(X, Y), male(Y).
+daughter(X, Y) :- child(X, Y), female(Y).
 
-sibling(X, Y) 	:- (mother(X, Z), mother(Y, Z) |
-				   father(X, W), father(Y, W)),
-				   dif(X, Y).
+sibling(X, Y) :-
+	(mother(X, Z), mother(Y, Z);
+	father(X, W), father(Y, W)),
+	dif(X, Y).
 
-brother(X, Y)	:- sibling(X, Y), male(Y).
-sister(X, Y)	:- sibling(X, Y), female(Y).
+brother(X, Y) :- sibling(X, Y), male(Y).
+sister(X, Y) :- sibling(X, Y), female(Y).
 
-cousin(X, Y)	:- parent(X, Z), parent(Y, W),
-				   sibling(Z, W).
+cousin(X, Y) :-
+	parent(X, Z),
+	parent(Y, W),
+	sibling(Z, W).
 
-uncle(X, Y) 	:- brother(Z, Y), (father(X, Z); mother(X, Z)).
-aunt(X, Y)		:- sister(Z, Y), (father(X, Z); mother(X, Z)).
+uncle(X, Y) :-
+	brother(Z, Y),
+	(father(X, Z); mother(X, Z)).
 
-grandparent(X, Y)	:- parent(X, Z), parent(Z, Y).
-grandfather(X, Y)	:- grandparent(X, Y), male(Y).
-grandmother(X, Y)	:- grandparent(X, Y), female(Y).
+aunt(X, Y) :-
+	sister(Z, Y),
+	(father(X, Z); mother(X, Z)).
 
-grandchild(X, Y)	:- grandparent(Y, X).
-grandson(X, Y)		:- grandchild(X, Y), male(Y).
-granddaughter(X, Y)	:- grandchild(X, Y), female(Y).
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+grandfather(X, Y) :- grandparent(X, Y), male(Y).
+grandmother(X, Y) :- grandparent(X, Y), female(Y).
 
-bloodRelated(X, Y)	:-
+grandchild(X, Y) :- grandparent(Y, X).
+grandson(X, Y) :- grandchild(X, Y), male(Y).
+granddaughter(X, Y) :- grandchild(X, Y), female(Y).
+
+bloodRelated(X, Y) :-
 	parent(X, Y);
 	child(X, Y);
 	sibling(X, Y);
@@ -95,6 +103,8 @@ bloodRelated(X, Y)	:-
 	uncle(X, Y);
 	aunt(X, Y).
 
-procreated(X, Y) :- parent(Z, X), parent(Z, Y), dif(X, Y).
+procreated(X, Y) :-
+	parent(Z, X), parent(Z, Y),
+	dif(X, Y).
 
-incest(X, Y) 	:- procreated(X, Y), bloodRelated(X, Y).
+incest(X, Y) :- procreated(X, Y), bloodRelated(X, Y).
