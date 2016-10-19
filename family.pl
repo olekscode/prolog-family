@@ -27,20 +27,6 @@ female(remedios).
 female(amarantaUrsula).
 female(renataRemedios).
 
-spouse(nicanorUlloa, rebecaMontiel).
-spouse(joseArcadioBuendia, ursulaIguaran).
-spouse(rebeca, joseArcadio).
-spouse(joseArcadio, pilarTernera).
-spouse(pilarTernera, aureliano).
-spouse(aureliano, remediosMoscote).
-spouse(santaSofiaDeLaPiedad, arcadio).
-spouse(fernandoDelCarpio, renataArgote).
-spouse(petraCotes, aurelianoSegundo).
-spouse(aurelianoSegundo, fernandaDelCaprio).
-spouse(gaston, amarantaUrsula).
-spouse(renataRemedios, mauricioBabilonia).
-spouse(amarantaUrsula, aurelianoBabilonia).
-
 parent(rebeca, nicanorUlloa).
 parent(rebeca, rebecaMontiel).
 parent(joseArcadio, joseArcadioBuendia).
@@ -71,10 +57,6 @@ parent(aurelianoBabilonia, renataRemedios).
 parent(aurelianoBabilonia, mauricioBabilonia).
 parent(aurelianoJunior, amarantaUrsula).
 parent(aurelianoJunior, aurelianoBabilonia).
-
-spouse(X, Y) 	:- spouse(Y, X).
-husband(X, Y) 	:- spouse(X, Y), male(Y).
-wife(X, Y) 		:- spouse(X, Y), female(Y).
 
 father(X, Y) 	:- parent(X, Y), male(Y).
 mother(X, Y) 	:- parent(X, Y), female(Y).
@@ -113,4 +95,6 @@ bloodRelated(X, Y)	:-
 	uncle(X, Y);
 	aunt(X, Y).
 
-incest(X, Y) 	:- spouse(X, Y), bloodRelated(X, Y).
+procreated(X, Y) :- parent(Z, X), parent(Z, Y), dif(X, Y).
+
+incest(X, Y) 	:- procreated(X, Y), bloodRelated(X, Y).
