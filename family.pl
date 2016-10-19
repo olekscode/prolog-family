@@ -66,8 +66,7 @@ son(X, Y) :- child(X, Y), male(Y).
 daughter(X, Y) :- child(X, Y), female(Y).
 
 sibling(X, Y) :-
-	(mother(X, Z), mother(Y, Z);
-	father(X, W), father(Y, W)),
+	parent(X, Z), parent(Y, Z),
 	dif(X, Y).
 
 brother(X, Y) :- sibling(X, Y), male(Y).
@@ -86,6 +85,14 @@ aunt(X, Y) :-
 	sister(Z, Y),
 	(father(X, Z); mother(X, Z)).
 
+nephew(X, Y) :-
+	(uncle(Y, X); aunt(Y, X)),
+	male(Y).
+
+niece(X, Y) :-
+	(uncle(Y, X); aunt(Y, X)),
+	female(Y).
+
 grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
 grandfather(X, Y) :- grandparent(X, Y), male(Y).
 grandmother(X, Y) :- grandparent(X, Y), female(Y).
@@ -101,7 +108,10 @@ bloodRelated(X, Y) :-
 	grandparent(X, Y);
 	grandchild(X, Y);
 	uncle(X, Y);
-	aunt(X, Y).
+	aunt(X, Y);
+	nephew(X, Y);
+	niece(X, Y).
+
 
 procreated(X, Y) :-
 	parent(Z, X), parent(Z, Y),
